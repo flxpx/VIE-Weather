@@ -83,6 +83,9 @@
             
     
         
+            
+
+
 
             <div class="row text-center py-5">
                 <div class="col">
@@ -93,6 +96,7 @@
                 </div>
                 </div>
             </div>
+
 
         
        
@@ -136,32 +140,38 @@
                         console.log(dateInput.value)
                         date = dateInput.value
                         jsDate.innerText = date;
+                        clearError();
                         clearTable();
+                        loadingData();
                         dataFetch();
-                    })
-
-                   // console.log()
-                    //dateSel.addEventListener('')
-    
+                    })  
 
 
                     // help found here:
                     // https://stackoverflow.com/questions/43871637/no-access-control-allow-origin-header-is-present-on-the-requested-resource-whe
                     
                     var jsDate = document.querySelector(".js-date")
-    
-                    //var date = String(prompt("Please enter a date (YYYY-MM-DD)", "2020-07-08"))
-                     //var date = "2020-11-29"
-
-                    //jsDate.innerText = date;
-
                     
                     var errorMsg = document.querySelector(".js-error")
                     var dataTable = document.querySelector(".js-table")
     
+
                     function clearTable(){
                         dataTable.innerHTML = " "
                     }
+
+                    function clearError(){
+                        errorMsg.style.display = "none";
+                    }
+
+                    function loadingData(){
+                        if(dataTable.innerHTML = " ") {
+                            dataTable.innerHTML = "Data is loading"
+                        } else {
+                            dataTable.innerHTML = dataTable.innerHTML
+                        }
+                    }
+
                     function dataFetch(){
                         console.log("Loading data from", date) 
                         const proxyurl = "https://cors-anywhere.herokuapp.com/";
@@ -177,7 +187,7 @@
                                 const rows = fetchedData.split('\n');
                                 //console.log(rows[0])
                                 //console.log(rows[1])
-
+                                clearTable();
                                 for(i = 1; i <=24; i++) {
                                         const singleRow = rows[i].split("';'") //splits every row into each of the ';' separated values
                                         if(singleRow[1] != undefined) {    
@@ -187,6 +197,8 @@
                                             const pressure = singleRow[13] // takes the item 14 of the row: the pressure
                                             const humid = singleRow[7]
 
+                                            
+                                            
                                             dataTable.innerHTML = dataTable.innerHTML + `<tr>
                                                                     <td>${date}</td>
                                                                     <td>${time}</td>
@@ -215,6 +227,10 @@
         <script src='https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js'
             integrity='sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx'
             crossorigin='anonymous'></script>
+    <!-- Chart.js     -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.js"
+            integrity="sha512-zO8oeHCxetPn1Hd9PdDleg5Tw1bAaP0YmNvPY8CwcRyUk7d7/+nyElmFrB6f7vg4f7Fv4sui1mcep8RIEShczg=="
+            crossorigin="anonymous"></script>
         
     <!-- BS End -->
  </body>
