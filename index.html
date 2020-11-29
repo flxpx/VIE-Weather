@@ -59,7 +59,7 @@
                 <div class="col">
                     <h3>Sorry, no data found</h3>
                     <p>Weather records go back to 2014-07-26</p>
-                    <p>Please make sure you use the correct date format: YYYY-MM-DD</p>
+                    <!-- <p>Please make sure you use the correct date format: YYYY-MM-DD</p> -->
                 </div>
             </div>
 
@@ -82,7 +82,17 @@
             </div> -->
             
     
-        </div>
+        
+
+            <div class="row text-center py-5">
+                <div class="col">
+                    <div class="form-group">
+                    <label for="date" class="form-control-lg">Select a date</label>
+                    <input type="date" id="date" class="form-control-lg js-date-sel" value="">
+                    <button type="submit" id="date-input" class="form-control-lg">Check</button>
+                </div>
+                </div>
+            </div>
 
         
        
@@ -90,6 +100,7 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th scope="col">Date</th>
                         <th scope="col">Time</th>
                         <th scope="col">°C</th>
                         <th scope="col">Pressure</th>
@@ -102,27 +113,55 @@
             </table>
         </div>
 
+        <div class="row js-error text-center">
+            <div class="col">
+                <h3>Sorry, no data found</h3>
+                <p>Weather records go back to 2014-07-26</p>
+                <!-- <p>Please make sure you use the correct date format: YYYY-MM-DD</p> -->
+            </div>
+        </div>
+
         <div class="row">
             <div class="col text-center">Data is fetched from <a href="http://at-wetter.tk/">http://at-wetter.tk/</a> - thx to Thomas Mitschke!</div>
         </div>
 
+    </div>
+
         <script>
+                    var dateInput = document.querySelector(".js-date-sel")
+                    var dateSubmit = document.querySelector("#date-input")
+                    console.log(dateInput.value)
+
+                    dateSubmit.addEventListener('click', function(event){
+                        console.log(dateInput.value)
+                        date = dateInput.value
+                        jsDate.innerText = date;
+                        clearTable();
+                        dataFetch();
+                    })
+
+                   // console.log()
+                    //dateSel.addEventListener('')
+    
+
+
                     // help found here:
                     // https://stackoverflow.com/questions/43871637/no-access-control-allow-origin-header-is-present-on-the-requested-resource-whe
                     
-    
                     var jsDate = document.querySelector(".js-date")
     
-                    var date = String(prompt("Please enter a date (YYYY-MM-DD)", "2020-07-08"))
-                    // var date = "2020-07-08"
+                    //var date = String(prompt("Please enter a date (YYYY-MM-DD)", "2020-07-08"))
+                     //var date = "2020-11-29"
 
-                    jsDate.innerText = date;
+                    //jsDate.innerText = date;
 
                     
                     var errorMsg = document.querySelector(".js-error")
                     var dataTable = document.querySelector(".js-table")
     
-    
+                    function clearTable(){
+                        dataTable.innerHTML = " "
+                    }
                     function dataFetch(){
                         console.log("Loading data from", date) 
                         const proxyurl = "https://cors-anywhere.herokuapp.com/";
@@ -142,12 +181,14 @@
                                 for(i = 1; i <=24; i++) {
                                         const singleRow = rows[i].split("';'") //splits every row into each of the ';' separated values
                                         if(singleRow[1] != undefined) {    
+                                            const date = singleRow[3] // takes the item 3 of the row: date
                                             const time = singleRow[4] // takes the item 4 of the row: time
                                             const temp = singleRow[5] // takes the item 5 of the row: the temp
                                             const pressure = singleRow[13] // takes the item 14 of the row: the pressure
                                             const humid = singleRow[7]
 
                                             dataTable.innerHTML = dataTable.innerHTML + `<tr>
+                                                                    <td>${date}</td>
                                                                     <td>${time}</td>
                                                                     <td>${temp}</td>
                                                                     <td>${pressure}</td>
@@ -159,7 +200,7 @@
                             })
                     };
 
-                    dataFetch();
+                   //dataFetch();
     
             
         </script>
