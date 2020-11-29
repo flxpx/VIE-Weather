@@ -109,7 +109,7 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">Date</th>
+                        <!-- <th scope="col">Date</th> -->
                         <th scope="col">Time</th>
                         <th scope="col">°C</th>
                         <th scope="col">Pressure</th>
@@ -142,18 +142,37 @@
                     var timeInput = document.querySelector("#time-input")
 
                     console.log(timeInput.value)
-
+                    
+                    var timeCheck = timeInput.value;
 
                     dateSubmit.addEventListener('click', function(event){
-                        console.log(dateInput.value)
-                        date = dateInput.value
+                        console.log("Checking for",dateInput.value)
+                        
+                        //console.log("at ",timeInput.value)
+                        date = dateInput.value;
                         jsDate.innerText = date;
-                        if(timeInput.value != undefined ){timeInput = String(timeInput.value.slice(0,2))}
+                        
+                        var timeCheck = timeInput.value;
+                        
+                        if(timeCheck === undefined || timeCheck === ""){
+                                timeCheck = "---"
+                                console.log("no time entered")
+                            } else {
+                                console.log("Time", timeCheck)
+                                timeCheck = String(timeCheck.slice(0,2))
+                                console.log("timeCheck", timeCheck)
+                            }
                         
                         clearError();
                         clearTable();
                         loadingData();
-                        dataFetch();
+                        dataFetch(timeCheck);
+
+                        // checkTime();
+                        // clearError();
+                        // clearTable();
+                        // loadingData();
+                        // dataFetch();
                     })  
 
 
@@ -182,7 +201,7 @@
                         }
                     }
 
-                    function dataFetch(){
+                    function dataFetch(timeCheck){
                         console.log("Loading data from", date) 
                         const proxyurl = "https://cors-anywhere.herokuapp.com/";
                         let url = `http://at-wetter.tk/api/v1/station/11036/all/${date}/";`
@@ -207,11 +226,15 @@
                                             const pressure = singleRow[13] // takes the item 14 of the row: the pressure
                                             const humid = singleRow[7]
 
-                                            timeSlot = String(time.slice(0,2))
+                                            const timeSlot = String(time.slice(0,2))
 
-                                            if(timeSlot == timeInput) {
+                                            console.log("timeSlot",timeSlot)
+                                            
+                                            console.log("timeCheck",timeCheck)
+
+                                            if(timeSlot === timeCheck) {
+                                                console.log("timeSlot", timeSlot)
                                                 dataTable.innerHTML = dataTable.innerHTML + `<tr class="table-success">
-                                                                    <td>${date}</td>
                                                                     <td>${time}</td>
                                                                     <td>${temp}</td>
                                                                     <td>${pressure}</td>
@@ -219,7 +242,6 @@
                                                                 </tr>`
                                             } else {
                                                 dataTable.innerHTML = dataTable.innerHTML + `<tr>
-                                                                    <td>${date}</td>
                                                                     <td>${time}</td>
                                                                     <td>${temp}</td>
                                                                     <td>${pressure}</td>
