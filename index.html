@@ -14,7 +14,20 @@
             background-color: #2F4F4F;
             color: lightgoldenrodyellow;
         }
+
+        .js-error {
+            color: lightsalmon;
+            display: none;
+        }
+
+        a, a:hover, a:visited {
+            color: lightgoldenrodyellow;
+            font-weight: bold;
+        }
+
     </style>
+
+
  </head>
 
  <body>
@@ -35,32 +48,44 @@
         </div>
     
         <div class="container">
-            <div class="row">
-                <h2>Wien, <span class="js-date">Datum</span></h2>
+            <div class="row text-center py-5">
+                <div class="col">
+                    <h1><span class="js-loc">Wien Hohe Warte</span>, <span class="js-date">Datum</span></h1>
+                </div>
+            </div>
+
+            <div class="row js-error text-center">
+                <div class="col">
+                    <h3>Sorry, no data found</h3>
+                    <p>Weather records go back to 2014-07-26</p>
+                    <p>Please make sure you use the correct date format: YYYY-MM-DD</p>
+                </div>
             </div>
 
             <div class="row">
 
                 <div class="col">
                     <h6>Temperature Data</h6>
-                    <ul class="tempLi"></ul>
+                    <ul class="tempLi list-unstyled"></ul>
                 </div>
                 <div class="col">
                     <h6>Atmospheric Pressure Data (Station Level)</h6>
-                    <ul class="pressLi">
+                    <ul class="pressLi list-unstyled">
                     </ul>
                 </div>
                 <div class="col">
                     <h6>Relative Humidity Data</h6>
-                    <ul class="humLi">
+                    <ul class="humLi list-unstyled">
                     </ul>
                 </div>
             </div>
             
     
         </div>
-    <div>
-    Data is fetched from http://at-wetter.tk/ - thx to Thomas Mitschke!</div>
+
+        <div class="row">
+            <div class="col text-center">Data is fetched from <a href="http://at-wetter.tk/">http://at-wetter.tk/</a> - thx to Thomas Mitschke!</div>
+        </div>
        
     
     
@@ -78,6 +103,7 @@
                     var tempLi = document.querySelector(".tempLi");
                     var pressLi = document.querySelector(".pressLi")
                     var humLi = document.querySelector(".humLi")
+                    var errorMsg = document.querySelector(".js-error")
     
     
                     function dataFetch(data){
@@ -87,6 +113,11 @@
                         fetch(proxyurl + url) // https://cors-anywhere.herokuapp.com/https://example.com
                             .then(response => response.text())
                             .then(fetchedData => {
+                                if(fetchedData.length === 0 ) {
+                                    console.warn("Too bad, no data was found")
+                                    
+                                    errorMsg.style.display = "inline";
+                                }
                                 //Split the csv into rows
                                 const rows = fetchedData.split('\n');
                                 //console.log(rows[1])
