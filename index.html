@@ -87,15 +87,20 @@
 
 
 
-            <div class="row text-center py-5">
+            <div class="row text-center pt-5">
                 <div class="col">
                     <div class="form-group">
-                    <label for="date" class="form-control-lg">Select a date</label>
-                    <input type="date" id="date" class="form-control-lg js-date-sel" value="">
-                    <button type="submit" id="date-input" class="form-control-lg">Check</button>
-                </div>
+                        <label for="date" class="form-control-lg">Select a date</label>
+                        <input type="date" id="date" class="form-control-lg js-date-sel" value="">
+
+                        <label for="time-input" class="form-control-lg">Select a time (optional)</label>
+                        <input type="time" id="time-input" value="" class="form-control-lg">
+
+                        <button type="submit" id="date-time-input" class="form-control-lg">Check</button>
+                    </div>
                 </div>
             </div>
+        
 
 
         
@@ -133,13 +138,18 @@
 
         <script>
                     var dateInput = document.querySelector(".js-date-sel")
-                    var dateSubmit = document.querySelector("#date-input")
-                    console.log(dateInput.value)
+                    var dateSubmit = document.querySelector("#date-time-input")
+                    var timeInput = document.querySelector("#time-input")
+
+                    console.log(timeInput.value)
+
 
                     dateSubmit.addEventListener('click', function(event){
                         console.log(dateInput.value)
                         date = dateInput.value
                         jsDate.innerText = date;
+                        if(timeInput.value != undefined ){timeInput = String(timeInput.value.slice(0,2))}
+                        
                         clearError();
                         clearTable();
                         loadingData();
@@ -197,15 +207,27 @@
                                             const pressure = singleRow[13] // takes the item 14 of the row: the pressure
                                             const humid = singleRow[7]
 
-                                            
-                                            
-                                            dataTable.innerHTML = dataTable.innerHTML + `<tr>
+                                            timeSlot = String(time.slice(0,2))
+
+                                            if(timeSlot == timeInput) {
+                                                dataTable.innerHTML = dataTable.innerHTML + `<tr class="table-success">
                                                                     <td>${date}</td>
                                                                     <td>${time}</td>
                                                                     <td>${temp}</td>
                                                                     <td>${pressure}</td>
                                                                     <td>${humid}</td>
                                                                 </tr>`
+                                            } else {
+                                                dataTable.innerHTML = dataTable.innerHTML + `<tr>
+                                                                    <td>${date}</td>
+                                                                    <td>${time}</td>
+                                                                    <td>${temp}</td>
+                                                                    <td>${pressure}</td>
+                                                                    <td>${humid}</td>
+                                                                </tr>`
+                                            }
+                                            
+                                            
                                         }
                                     }
                                 
