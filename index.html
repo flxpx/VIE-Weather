@@ -360,7 +360,7 @@
                                                     data: tempArray,
                                                     backgroundColor: 'rgba(255, 102, 179, 0.25)',
                                                     label: 'Temperature',
-
+                                                    borderColor: 'rgba(255, 102, 179, 0.5)',
                                                     // This binds the dataset to the left y axis
                                                     yAxisID: 'left-y-axis',
 
@@ -368,7 +368,8 @@
                                                 }, {
                                                     // Pressure
                                                     data: pressureArray,
-                                                    backgroundColor: 'rgba(8, 75, 131, 0.75)',
+                                                    backgroundColor: 'rgba(8, 75, 131, 0.5)',
+                                                    borderColor: 'rgba(8, 75, 131, 1)',
                                                     label: 'Pressure',
 
                                                     // This binds the dataset to the right y axis
@@ -380,6 +381,7 @@
                                                     // Humidity
                                                     data: humidArray,
                                                     backgroundColor: 'rgba(66, 191, 221, 0.02)',
+                                                    borderColor: 'rgba(66, 191, 221, .27)',
                                                     label: 'Humidity',
 
                                                     // This binds the dataset to the right y axis
@@ -390,7 +392,9 @@
                                                 {
                                                 // selected time
                                                     data: timeSel,
-                                                    backgroundColor: 'rgba(255, 160, 122, 0.1)',
+                                                    backgroundColor: 'rgba(255, 160, 122, 0.05)',
+                                                    borderColor: 'rgba(255, 160, 122, 1)',
+                                                    borderWidth: 1,
                                                     label: 'selectedTime',
                                                     
                                                     yAxisID: 'right-y-axis-time',
@@ -418,6 +422,9 @@
                                                             fontColor: 'rgba(255, 102, 179, 0.5)'
                                                         },
 
+                                                        
+                                                        gridLines:{display:false},
+
                                                         ticks: {
                                                             fontColor: 'rgba(255, 102, 179, 0.5)',
                                                         }
@@ -433,6 +440,8 @@
                                                             labelString: 'Pressure in hpa',
                                                             fontColor: 'rgba(8, 75, 131, 0.75)'
                                                         },
+                                                        
+                                                        gridLines:{display:false},
 
                                                         ticks: {
                                                             fontColor: 'rgba(8, 75, 131, 0.75)',
@@ -441,6 +450,9 @@
                                                         id: 'right-y-axis-hum',
                                                         type: 'linear',
                                                         position: 'right',
+
+                                                        
+                                                        gridLines:{display:false},
 
                                                         scaleLabel: {
                                                             display: true,
@@ -456,8 +468,13 @@
                                                         type: 'linear',
                                                         position: 'right',
                                                         display: false,
+                                                        
+                                                        gridLines:{display:false}
                                                     }
-                                                ]
+                                                ],
+
+                                                
+                                                
                                             }
                                         }
                                     });
