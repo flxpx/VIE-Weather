@@ -24,7 +24,7 @@
 
         .js-error {
             color: lightsalmon;
-            color: rgba(255, 160, 122, 0.726);
+            /* color: rgba(255, 160, 122, 0.63); */
             display: none;
         }
 
@@ -158,6 +158,39 @@
                     
                     // var timeCheck = timeInput.value;
 
+                      
+
+
+                    // help found here:
+                    // https://stackoverflow.com/questions/43871637/no-access-control-allow-origin-header-is-present-on-the-requested-resource-whe
+                    
+                    var jsDate = document.querySelector(".js-date")
+                    
+                    var errorMsg = document.querySelector(".js-error")
+                    var dataTable = document.querySelector(".js-table")
+    
+
+                    function clearTable(){
+                        dataTable.innerHTML = " "
+                        var pressureArray = Array()
+                        var humidArray = Array()
+                        var timeArray = Array()
+                        var frstChart = undefined;
+
+                    }
+
+                    function clearError(){
+                        errorMsg.style.display = "none";
+                    }
+
+                    function loadingData(){
+                        if(dataTable.innerHTML = " ") {
+                            dataTable.innerHTML = "Data is loading"
+                        } else {
+                            dataTable.innerHTML = dataTable.innerHTML
+                        }
+                    }
+
                     dateSubmit.addEventListener('click', function(event){
                         console.log("Checking for",dateInput.value)
                         
@@ -173,44 +206,21 @@
                             } else {
                                 timeCheck = String(timeCheck.slice(0,2))
                             }
-                        
                         clearError();
                         clearTable();
                         loadingData();
                         dataFetch(timeCheck);
-
+                        
+                        
+                        console.log("timeCheck",timeCheck)
+                       
+                        
                         // checkTime();
                         // clearError();
                         // clearTable();
                         // loadingData();
                         // dataFetch();
-                    })  
-
-
-                    // help found here:
-                    // https://stackoverflow.com/questions/43871637/no-access-control-allow-origin-header-is-present-on-the-requested-resource-whe
-                    
-                    var jsDate = document.querySelector(".js-date")
-                    
-                    var errorMsg = document.querySelector(".js-error")
-                    var dataTable = document.querySelector(".js-table")
-    
-
-                    function clearTable(){
-                        dataTable.innerHTML = " "
-                    }
-
-                    function clearError(){
-                        errorMsg.style.display = "none";
-                    }
-
-                    function loadingData(){
-                        if(dataTable.innerHTML = " ") {
-                            dataTable.innerHTML = "Data is loading"
-                        } else {
-                            dataTable.innerHTML = dataTable.innerHTML
-                        }
-                    }
+                    })
 
                     function dataFetch(timeCheck){
                         console.log("Loading data from", date) 
@@ -224,11 +234,13 @@
                                     errorMsg.style.display = "inline";
                                 }
                                 //Split the csv into rows
+                                
                                 const rows = fetchedData.split('\n');
-                                //console.log(rows[0])
+                                
+                                //console.log("ROWS", rows)
                                 //console.log(rows[1])
                                 clearTable();
-                                var tempArray = ""
+                                var tempArray = Array()
                                 var pressureArray = Array()
                                 var humidArray = Array()
                                 var timeArray = Array()
@@ -245,9 +257,9 @@
 
                                             const timeSlot = String(time.slice(0,2))
 
-                                            console.log("timeSlot",timeSlot)
+                                            // console.log("timeSlot",timeSlot)
                                             
-                                            console.log("timeCheck",timeCheck)
+                                            // console.log("timeCheck",timeCheck)
 
                                             if(timeSlot === timeCheck) {
                                                 console.log("timeSlot", timeSlot)
@@ -267,23 +279,68 @@
                                             }
 
                                             
-                                            var tempArray = (tempArray + String(temp+",")).split(',')
-                                            var pressureArray = (pressureArray + String(pressure+",")).split(',')
-                                            var humidArray = (humidArray + String(humid+",")).split(',')
-                                            var timeArray = (timeArray + String(time+",")).split(',')
-                                            
-                                            
+                                            var tempArray = (tempArray + String(temp+","))
+                                            var pressureArray = (pressureArray + String(pressure+","))
+                                            var humidArray = (humidArray + String(humid+","))
+                                            var timeArray = (timeArray + String(time+","))
                                         }
+
                                 }
                                 
-                // DATA FETCH end
+                                // DATA FETCH end
 
-                                timeArray = timeArray.splice(0,24)
-                                pressureArray = pressureArray.splice(0,24)
-                                humidArray = humidArray.splice(0,24)
-                                tempArray = tempArray.splice(0,24)
+                                timeArray = timeArray.split(',')
+                                pressureArray = pressureArray.split(',')
+                                humidArray = humidArray.split(',')
+                                tempArray = tempArray.split(',')
+                                
+                                if (timeArray.length > 24) {
+                                    timeArray = timeArray.slice(0,24)
+                                    pressureArray = pressureArray.slice(0,24)
+                                    humidArray = humidArray.slice(0,24)
+                                    tempArray = tempArray.slice(0,24)
+                                } else if (timeArray.length < 24) {
+                                    timeArray = timeArray
+                                    pressureArray = pressureArray
+                                    humidArray = humidArray
+                                    tempArray = tempArray
+                                }
+                                var timeSel = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+                                
+
+                                timeCheck = Number(timeCheck)
 
                                 
+                                var range = 3;
+                                    var rangeBefore = 0;
+                                    var rangeAfter = 24;
+
+                                if(timeCheck >= 0) {
+                                    console.log("timeCheck is a number:", Number(timeCheck));
+
+                                    timeSel[timeCheck] = 1;
+                                    
+                                    if(timeCheck < range){
+                                        rangeBefore = 0;
+                                    } else {
+                                        rangeBefore = (timeCheck - range);
+                                    }
+
+                                    rangeAfter = Number(timeCheck + range +1);
+                                
+                                    timeArray = timeArray.slice(rangeBefore,rangeAfter)
+                                    pressureArray = pressureArray.slice(rangeBefore,rangeAfter)
+                                    humidArray = humidArray.slice(rangeBefore,rangeAfter)
+                                    tempArray = tempArray.slice(rangeBefore,rangeAfter)
+                                    timeSel = timeSel.slice(rangeBefore,rangeAfter)
+
+                                    console.log("Range", rangeBefore, "-", rangeAfter)
+                                } else {console.log("timeCheck is", Number(timeCheck))}
+
+
+                                
+
+                                console.log("timeSel", timeSel)
                                 console.log("Time: ", timeArray) 
                                 console.log("Temp: ", tempArray)
                                 console.log("Pressure: ", pressureArray)
@@ -291,8 +348,11 @@
 
                                 // CHART
                                     var ctx = document.getElementById('frstChart');
+                                    
+                                    
                                     var frstChart = new Chart(ctx, {
                                         type: 'line',
+                                        
                                         data: {
                                             datasets: [
                                                 {
@@ -302,7 +362,9 @@
                                                     label: 'Temperature',
 
                                                     // This binds the dataset to the left y axis
-                                                    yAxisID: 'left-y-axis'
+                                                    yAxisID: 'left-y-axis',
+
+                                                    type: 'line'
                                                 }, {
                                                     // Pressure
                                                     data: pressureArray,
@@ -310,37 +372,92 @@
                                                     label: 'Pressure',
 
                                                     // This binds the dataset to the right y axis
-                                                    yAxisID: 'right-y-axis'
-                                                }, {
+                                                    yAxisID: 'right-y-axis',
+
+                                                    type: 'line'
+                                                },
+                                                {
                                                     // Humidity
                                                     data: humidArray,
                                                     backgroundColor: 'rgba(66, 191, 221, 0.02)',
                                                     label: 'Humidity',
 
                                                     // This binds the dataset to the right y axis
-                                                    yAxisID: 'right-y-axis-hum'
+                                                    yAxisID: 'right-y-axis-hum',
+
+                                                    type: 'line'
+                                                },
+                                                {
+                                                // selected time
+                                                    data: timeSel,
+                                                    backgroundColor: 'rgba(255, 160, 122, 0.1)',
+                                                    label: 'selectedTime',
+                                                    
+                                                    yAxisID: 'right-y-axis-time',
+
+                                                    type: 'bar'
                                                 }
                                                 
                                                 
                                             ],
+
                                             labels: timeArray
                                         },
 
                                         options: {
                                             scales: {
-                                                yAxes: [{
-                                                    id: 'left-y-axis',
-                                                    type: 'linear',
-                                                    position: 'left'
-                                                }, {
-                                                    id: 'right-y-axis',
-                                                    type: 'linear',
-                                                    position: 'right'
-                                                }, {
-                                                    id: 'right-y-axis-hum',
-                                                    type: 'linear',
-                                                    position: 'right'
-                                                }]
+                                                yAxes: [
+                                                    { // for temperature
+                                                        id: 'left-y-axis',
+                                                        type: 'linear',
+                                                        position: 'left',
+                                                        
+                                                        scaleLabel: {
+                                                            display: true,
+                                                            labelString: 'Temperature in °C',
+                                                            fontColor: 'rgba(255, 102, 179, 0.5)'
+                                                        },
+
+                                                        ticks: {
+                                                            fontColor: 'rgba(255, 102, 179, 0.5)',
+                                                        }
+
+
+                                                    }, { //for Pressure
+                                                        id: 'right-y-axis',
+                                                        type: 'linear',
+                                                        position: 'right',
+
+                                                        scaleLabel: {
+                                                            display: true,
+                                                            labelString: 'Pressure in hpa',
+                                                            fontColor: 'rgba(8, 75, 131, 0.75)'
+                                                        },
+
+                                                        ticks: {
+                                                            fontColor: 'rgba(8, 75, 131, 0.75)',
+                                                        }
+                                                    }, { // for humidity
+                                                        id: 'right-y-axis-hum',
+                                                        type: 'linear',
+                                                        position: 'right',
+
+                                                        scaleLabel: {
+                                                            display: true,
+                                                            labelString: 'Realtive Humidity in %',
+                                                                fontColor: 'rgba(66, 191, 221, 0.5)'
+                                                            },
+
+                                                        ticks: {
+                                                            fontColor: 'rgba(66, 191, 221, 0.5)',
+                                                            }
+                                                    }, { // for selTime
+                                                        id: 'right-y-axis-time',
+                                                        type: 'linear',
+                                                        position: 'right',
+                                                        display: false,
+                                                    }
+                                                ]
                                             }
                                         }
                                     });
