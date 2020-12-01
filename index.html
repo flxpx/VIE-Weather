@@ -237,7 +237,10 @@
                                 
                                 const rows = fetchedData.split('\n');
                                 
-                                //console.log("ROWS", rows)
+                                console.log("ROWS", rows.length)
+
+                                var dataPoints = rows.length-2
+                                console.log(dataPoints)
                                 //console.log(rows[1])
                                 clearTable();
                                 var tempArray = Array()
@@ -245,8 +248,8 @@
                                 var humidArray = Array()
                                 var timeArray = Array()
                                 
-
-                                for(i = 1; i <=24; i++) {
+                                //24 gegen rows.length austauschen!!!
+                                for(i = 1; i <=dataPoints; i++) {
                                         const singleRow = rows[i].split("';'") //splits every row into each of the ';' separated values
                                         if(singleRow[1] != undefined) {    
                                             const date = singleRow[3] // takes the item 3 of the row: date
@@ -294,12 +297,12 @@
                                 humidArray = humidArray.split(',')
                                 tempArray = tempArray.split(',')
                                 
-                                if (timeArray.length > 24) {
-                                    timeArray = timeArray.slice(0,24)
-                                    pressureArray = pressureArray.slice(0,24)
-                                    humidArray = humidArray.slice(0,24)
-                                    tempArray = tempArray.slice(0,24)
-                                } else if (timeArray.length < 24) {
+                                if (timeArray.length > dataPoints) {
+                                    timeArray = timeArray.slice(0,dataPoints)
+                                    pressureArray = pressureArray.slice(0,dataPoints)
+                                    humidArray = humidArray.slice(0,dataPoints)
+                                    tempArray = tempArray.slice(0,dataPoints)
+                                } else if (timeArray.length < dataPoints) {
                                     timeArray = timeArray
                                     pressureArray = pressureArray
                                     humidArray = humidArray
